@@ -15,12 +15,12 @@ jobs:
         run: npm install # Replace with your installation command if necessary
 
       - name: Create Gist
-        uses: EnricoMi/gist-action@v2 # Use the 'gist-action' from EnricoMi
+        uses: madmalik/upload-gist@v1.4.0 # Use the 'upload-gist' action
         with:
-          content: |
-            index.html: ${{ github.workspace }}/index.html
-            style.css: ${{ github.workspace }}/style.css
-            script.js: ${{ github.workspace }}/script.js
+          files: |
+            ./index.html
+            ./style.css
+            ./script.js
           filename: 'ShapeBuilder.html' # Optional: Set a filename for the gist
           description: 'ShapeBuilder Tool' # Optional: Provide a description
 
