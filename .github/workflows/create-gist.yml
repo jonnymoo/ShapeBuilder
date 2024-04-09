@@ -1,0 +1,26 @@
+name: Create Gist
+
+on:
+  push: # Trigger the workflow on every push event
+
+jobs:
+  create-gist:
+    runs-on: ubuntu-latest # Run the workflow on Ubuntu virtual machines
+
+    steps:
+      - uses: actions/checkout@v3 # Checkout the repository code
+
+      - name: Install dependencies (if needed)
+        # Add this step if your script.js has dependencies (e.g., npm install)
+        run: npm install # Replace with your installation command if necessary
+
+      - name: Create Gist
+        uses: EnricoMi/gist-action@v2 # Use the 'gist-action' from EnricoMi
+        with:
+          content: |
+            index.html: ${{ files.contents['index.html'] }}
+            style.css: ${{ files.contents['style.css'] }}
+            script.js: ${{ files.contents['script.js'] }}
+          filename: 'ShapeBuilder.html' # Optional: Set a filename for the gist
+          description: 'ShapeBuilder Tool' # Optional: Provide a description
+
