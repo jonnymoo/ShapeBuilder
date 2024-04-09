@@ -18,9 +18,9 @@ jobs:
         uses: EnricoMi/gist-action@v2 # Use the 'gist-action' from EnricoMi
         with:
           content: |
-            index.html: ${{ files.contents['index.html'] }}
-            style.css: ${{ files.contents['style.css'] }}
-            script.js: ${{ files.contents['script.js'] }}
+            index.html: ${{ github.workspace }}/index.html
+            style.css: ${{ github.workspace }}/style.css
+            script.js: ${{ github.workspace }}/script.js
           filename: 'ShapeBuilder.html' # Optional: Set a filename for the gist
           description: 'ShapeBuilder Tool' # Optional: Provide a description
 
