@@ -57,18 +57,24 @@ function addListItem(parent, tableName, shapePart) {
     const input = document.createElement('input');
     input.type = 'text';
     input.setAttribute("list",`datalist-${tableName}`); 
+
+    // Create the label element
+    const label = document.createElement('label');
+    label.textContent = tableName + " field";  // Set the label text
+
+    // Generate a unique ID for the input element (recommended)
+    input.id = `input-${Math.random().toString(36).substring(2, 15)}`;  // Random ID
+ 
+    // Associate the label with the input using the "for" attribute
+    label.setAttribute("for", input.id);
+
+    // Append both label and input to the listItem element
+    listItem.appendChild(label);
     listItem.appendChild(input);
 
     datalist.offsetWidth; // Trigger reflow
 
     let selectValue = "";
-
-    
-
-    const removeButton = document.createElement('button');
-    removeButton.textContent = 'Remove';
-    removeButton.classList.add('hidden');
-    listItem.appendChild(removeButton);
 
     function ensureEmptyItem() {
         // Check for and add an empty list item if needed
@@ -77,7 +83,7 @@ function addListItem(parent, tableName, shapePart) {
         for (const childLI of parent.children) {
             if (childLI.tagName === 'LI') {
                 for (const childSelect of childLI.children) {
-                    if (childSelect.tagName == "SELECT" && childSelect.value == "") {
+                    if (childSelect.tagName == "INPUT" && childSelect.value == "") {
                         emptySelect = true;
                         break;
                     }
@@ -93,17 +99,14 @@ function addListItem(parent, tableName, shapePart) {
     input.addEventListener('change', (event) => {
         const selectedChild = event.target.value;
 
-        if (!(selectedChild in children)) {
-            return;
-        }
-
         if (selectValue) {
             delete shapePart[selectValue];
+            selectValue = "";
         }
-        selectValue = selectedChild;
 
-        if (selectedChild) {
-            removeButton.classList.remove('hidden');
+        if (selectedChild in children) {
+            selectValue = selectedChild;
+
             const childShape = children[selectedChild];
 
             // Remove existing nested lists before adding a new one for object or list type
@@ -124,19 +127,13 @@ function addListItem(parent, tableName, shapePart) {
                 // Normal field
                 shapePart[selectedChild] = null;
             }
-
-            ensureEmptyItem();
-            setJSON();
-
+        } else {
+            parent.removeChild(listItem);
         }
-    });
 
-    // Event listener for remove button click
-    removeButton.addEventListener('click', () => {
-        parent.removeChild(listItem);
-        delete shapePart[selectValue];
         ensureEmptyItem();
         setJSON();
+
     });
 
     parent.appendChild(listItem);
